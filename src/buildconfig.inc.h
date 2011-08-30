@@ -1,0 +1,9 @@
+
+#ifndef _BUILDCONFIG_INC_H_
+#define _BUILDCONFIG_INC_H_
+
+#define OSCILLATOR_CHOICE HS
+#define CPU_FREQ_MHZ 10
+#define OSCCON_VALUE 0x70
+
+#endif

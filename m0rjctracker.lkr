@@ -1,0 +1,14 @@
+
+	INCLUDE 18f14K50_g.lkr
+
+
+	SECTION 	NAME=CodeModemISR	ROM=page
+	SECTION		NAME=CodeModem		ROM=page
+	SECTION		NAME=CodeWaveTable	ROM=page
+	SECTION		NAME=CodeEepromUtil ROM=page
+
+	SECTION		NAME=VarsModem		RAM=gpr0
+
+	SECTION		NAME=VarsGPSState	RAM=gpr0
+
+	SECTION		NAME=CodeConfigEEPROM	ROM=eedata
