@@ -39,10 +39,7 @@ The Hardware
 
 I'm developing using a PIC 18F14K50. 
 
-My GPS module is the DS-622R comes from RF Solutions.
-
-   http://www.rfsolutions.co.uk/acatalog/Board_Level_GPS_Receiver_Module.html the DS-622R
-
+My GPS module is the [DS-622R][http://www.rfsolutions.co.uk/acatalog/Board_Level_GPS_Receiver_Module.html] from RF Solutions.
 This is still reasonably cheap and works amazingly well, even finding a lock (eventually) indoors. It doesn't seem to like saving configuration changes to its
 flash RAM, so is stuck at 9600 baud. Not a problem here. Output is LVTTL.
 
@@ -64,8 +61,8 @@ Pin assignment so far: (Items in brackets can be worked around or changed)
 I will need to assign PTT IN, PTT OUT and whatever controls I may use. Maybe the two PTTs could be combined,
 though that could increase external circuitry. 
 
-The Plan
---------
+The State of Play
+-----------------
 
 * I now have AX25 wave generation complete. 
       See http://www.flickr.com/photos/m0rjc/6041105197/in/photostream/lightbox/
@@ -74,8 +71,12 @@ The Plan
 
 * I have Generated and "transmited" a hard coded test message. I could receive it using APRS software with the output from the PIC connected to the PC's mic input.
 
+The Plan
+--------
+
 * Receive information from the GPS module in interrupts using a state machine.
-     I am working on a state engine generator to make this easier to create and maintain.
+     I am working on a state engine generator to make this easier to create and maintain. 
+     This has now been forked into its own repository [m0rjc/PICStateMachineGenerator][https://github.com/m0rjc/PICStateMachineGenerator]
      The same generator can then be used for command interface, or maybe decoding?
 
 * Provide a means to detect "Radio Busy".
@@ -100,22 +101,21 @@ Very Long Term:
 * I plan to use an ADC input to detect incoming signal from the radio.
      Find a way of decoding incoming data. A couple of options present themselves:
 
-        -  The DTMF Decoder algorithms. I've not seen them settle in the past. Maybe I got them wrong.
+  -  The DTMF Decoder algorithms. I've not seen them settle in the past. Maybe I got them wrong.
 
-        -  Could I make a trellis decoder based on samples? I'd need to lock phase
-           (use a comparater to detect zero crossing perhaps?) and somehow ensure I
-           know the signal amplitude to work out the trellises. (easy peak detector) 
-           It would take some investigation to see if it's possble given resources.
-           Theoretically given a sample I should be able to work out where
-           the next sample will be for either of the two tone frequencies and compare.
-           The trick would be trying to reduce the amount of possibilities because I think
-           the maths to handle arbitrary position would be a lot. Sadly if I use an LCD I've
-           taken the comparater inputs so have to work entirely with the ADC.
-
+  -  Could I make a trellis decoder based on samples? I'd need to lock phase
+     (use a comparater to detect zero crossing perhaps?) and somehow ensure I
+     know the signal amplitude to work out the trellises. (easy peak detector) 
+     It would take some investigation to see if it's possble given resources.
+     Theoretically given a sample I should be able to work out where
+     the next sample will be for either of the two tone frequencies and compare.
+     The trick would be trying to reduce the amount of possibilities because I think
+     the maths to handle arbitrary position would be a lot. Sadly if I use an LCD I've
+     taken the comparater inputs so have to work entirely with the ADC.
 
 * If I can decode then that opens up some interesting possibilities
-      * Receive messages?
-      * Digipeat?
-      * Show other stations on a connected Garmin Etrex?  The limit would be time, and the amount of program and data space in the microcontroller.
+   * Receive messages?
+   * Digipeat?
+   * Show other stations on a connected Garmin Etrex?  The limit would be time, and the amount of program and data space in the microcontroller.
 
 * Experiment with smart track algorithms. I have some interesting ideas. I don't know how easy they would be.
