@@ -39,7 +39,7 @@ The Hardware
 
 I'm developing using a PIC 18F14K50. 
 
-My GPS module is the [DS-622R][http://www.rfsolutions.co.uk/acatalog/Board_Level_GPS_Receiver_Module.html] from RF Solutions.
+My GPS module is the DS-622R (http://www.rfsolutions.co.uk/acatalog/Board_Level_GPS_Receiver_Module.html) from RF Solutions.
 This is still reasonably cheap and works amazingly well, even finding a lock (eventually) indoors. It doesn't seem to like saving configuration changes to its
 flash RAM, so is stuck at 9600 baud. Not a problem here. Output is LVTTL.
 
@@ -76,7 +76,7 @@ The Plan
 
 * Receive information from the GPS module in interrupts using a state machine.
      I am working on a state engine generator to make this easier to create and maintain. 
-     This has now been forked into its own repository [m0rjc/PICStateMachineGenerator][https://github.com/m0rjc/PICStateMachineGenerator]
+     This has now been forked into its own repository (m0rjc/PICStateMachineGenerator).
      The same generator can then be used for command interface, or maybe decoding?
 
 * Provide a means to detect "Radio Busy".
@@ -103,15 +103,13 @@ Very Long Term:
 
   -  The DTMF Decoder algorithms. I've not seen them settle in the past. Maybe I got them wrong.
 
-  -  Could I make a trellis decoder based on samples? I'd need to lock phase
+  -  Could I make a trellis decoder based on samples? How about sign and sign of rate of change? The latter
+     is a natural Gray Code, and may not need frequent sampling. I'd need to lock phase
      (use a comparater to detect zero crossing perhaps?) and somehow ensure I
      know the signal amplitude to work out the trellises. (easy peak detector) 
      It would take some investigation to see if it's possble given resources.
      Theoretically given a sample I should be able to work out where
      the next sample will be for either of the two tone frequencies and compare.
-     The trick would be trying to reduce the amount of possibilities because I think
-     the maths to handle arbitrary position would be a lot. Sadly if I use an LCD I've
-     taken the comparater inputs so have to work entirely with the ADC.
 
 * If I can decode then that opens up some interesting possibilities
    * Receive messages?
