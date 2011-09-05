@@ -22,7 +22,7 @@
 				<Transition input="'$'" target="dollar" />
 			</Node>
 			<Node name="dollar">
-				<Script description="Read a GPPA locaton string">
+				<Script description="Read a GPGGA locaton string">
 					<Literal>GPGGA</Literal>
 					<GuardCondition>
 						<FlagCheck variable="gpsFlags" flag="FLAG_GPS_NEW_POSITION"	value="false" />
@@ -78,7 +78,7 @@
 					<Choices>
 						<Choice input="*">
 							<Commands>
-								<StoreValue source="gpsInput" destination="gpsQuality" />
+								<StoreValue destination="gpsQuality"/>
 							</Commands>
 						</Choice>
 					</Choices>
