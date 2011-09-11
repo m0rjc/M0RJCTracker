@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<StateGeneratorRun xmlns="http://net.raynet-uk.m0rjc.picprojects/stategenerator">
-	<Model root="root" inputVariable="gpsInput">
+<StateGeneratorRun
+	xmlns="http://net.raynet-uk.m0rjc.picprojects/stategenerator">
+	<Model name="gps" root="root" inputVariable="gpsInput">
 		<Symbols>
 			<Symbol name="gpsInput" loc="accessram" decl="global" />
 			<Symbol name="gpsFlags" loc="accessram" decl="global">
@@ -30,27 +31,25 @@
 					<Literal>,</Literal>
 					<Numbers min="6" max="6" store="gpsTime" />
 					<SkipTo>
-						<Choice input="'$'" goto="dollar" />
+						<Choice input="'$'" target="dollar" />
 						<Choice input="','" />
 					</SkipTo>
 					<Numbers min="4" max="4" store="gpsLatitudeDegMin" />
 					<Literal>.</Literal>
 					<Numbers max="2" min="2" store="gpsLatitudeHundredths" />
 					<SkipTo>
-						<Choice input="'$'" goto="dollar" />
+						<Choice input="'$'" target="dollar" />
 						<Choice input="','" />
 					</SkipTo>
 					<Choices>
 						<Choice input="'S'">
 							<Commands>
-								<SetFlag flag="FLAG_GPS_NORTH" variable="gpsFlags"
-									value="false" />
+								<SetFlag flag="FLAG_GPS_NORTH" variable="gpsFlags" value="false" />
 							</Commands>
 						</Choice>
 						<Choice input="'N'">
 							<Commands>
-								<SetFlag flag="FLAG_GPS_NORTH" variable="gpsFlags"
-									value="true" />
+								<SetFlag flag="FLAG_GPS_NORTH" variable="gpsFlags" value="true" />
 							</Commands>
 						</Choice>
 					</Choices>
@@ -59,7 +58,7 @@
 					<Literal>.</Literal>
 					<Numbers max="2" min="2" store="gpsLongitudeHundredths" />
 					<SkipTo>
-						<Choice input="'$'" goto="dollar" />
+						<Choice input="'$'" target="dollar" />
 						<Choice input="','" />
 					</SkipTo>
 					<Choices>
@@ -78,13 +77,13 @@
 					<Choices>
 						<Choice input="*">
 							<Commands>
-								<StoreValue destination="gpsQuality"/>
+								<StoreValue destination="gpsQuality" />
 							</Commands>
 						</Choice>
 					</Choices>
-					<Command>
+					<Commands>
 						<SetFlag variable="gpsFlags" flag="FLAG_GPS_NEW_POSITION" value="true" />
-					</Command>
+					</Commands>
 				</Script>
 			</Node>
 		</Nodes>
