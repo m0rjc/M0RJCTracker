@@ -35,9 +35,9 @@ gpsCode       CODE
 ;------------------------------------------------------------------------------
 ; State model initialisation.
 ;------------------------------------------------------------------------------
-gpsInit:      MOVLW    HIGH(root)
+gpsInit:      MOVLW    HIGH(step_root)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
+              MOVLW    LOW(step_root)
               MOVWF    _statePtr, A
               RETURN   
 
@@ -51,126 +51,122 @@ gpsStep:      CLRF     PCLATU, A
               MOVWF    PCL, A
 
 ;------------------------------------------------------------------------------
-; Node root
+; Node root entry code.
 ;------------------------------------------------------------------------------
-              ; -- Start of transition --
-root:
-              ;  Precondition gpsInput == 36
-trans0:       MOVLW    .36
-              CPFSEQ   gpsInput, A
-              GOTO     trans1
-              ;  Transition GOTO dollar
-              MOVLW    HIGH(dollar)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(dollar)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
               ;  Transition GOTO root
-trans1:       MOVLW    HIGH(root)
+enter_root:   MOVLW    HIGH(step_root)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
+              MOVLW    LOW(step_root)
               MOVWF    _statePtr, A
               RETURN   
 
 ;------------------------------------------------------------------------------
-; Node dollar
+; Node root step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-dollar:
-              ;  Precondition gpsInput == 71
+step_root:
+              ;  Precondition gpsInput == '$'
+trans0:       MOVLW    .36
+              CPFSEQ   gpsInput, A
+              GOTO     trans1
+              ;  Transition GOTO (Shared) dollar
+              GOTO     enter_dollar
+              ; -- Start of transition --
+              ;  Transition GOTO (Shared) root
+trans1:       GOTO     enter_root
+
+;------------------------------------------------------------------------------
+; Node dollar entry code.
+;------------------------------------------------------------------------------
+              ;  Transition GOTO dollar
+enter_dollar: MOVLW    HIGH(step_dollar)
+              MOVWF    (_statePtr + .1), A
+              MOVLW    LOW(step_dollar)
+              MOVWF    _statePtr, A
+              RETURN   
+
+;------------------------------------------------------------------------------
+; Node dollar step code.
+;------------------------------------------------------------------------------
+              ; -- Start of transition --
+step_dollar:
+              ;  Precondition gpsInput == 'G'
 trans2:       MOVLW    .71
               CPFSEQ   gpsInput, A
               GOTO     trans3
               ;  Transition GOTO gps_State_0000
-              MOVLW    HIGH(gps_State_0000)
+              MOVLW    HIGH(step_gps_State_0000)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0000)
+              MOVLW    LOW(step_gps_State_0000)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans3:       MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans3:       GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0000
+; Node gps_State_0000 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0000:
-              ;  Precondition gpsInput == 80
+step_gps_State_0000:
+              ;  Precondition gpsInput == 'P'
 trans4:       MOVLW    .80
               CPFSEQ   gpsInput, A
               GOTO     trans5
               ;  Transition GOTO gps_State_0001
-              MOVLW    HIGH(gps_State_0001)
+              MOVLW    HIGH(step_gps_State_0001)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0001)
+              MOVLW    LOW(step_gps_State_0001)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans5:       MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans5:       GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0001
+; Node gps_State_0001 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0001:
-              ;  Precondition gpsInput == 71
+step_gps_State_0001:
+              ;  Precondition gpsInput == 'G'
 trans6:       MOVLW    .71
               CPFSEQ   gpsInput, A
               GOTO     trans7
               ;  Transition GOTO gps_State_0002
-              MOVLW    HIGH(gps_State_0002)
+              MOVLW    HIGH(step_gps_State_0002)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0002)
+              MOVLW    LOW(step_gps_State_0002)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans7:       MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans7:       GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0002
+; Node gps_State_0002 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0002:
-              ;  Precondition gpsInput == 71
+step_gps_State_0002:
+              ;  Precondition gpsInput == 'G'
 trans8:       MOVLW    .71
               CPFSEQ   gpsInput, A
               GOTO     trans9
               ;  Transition GOTO gps_State_0003
-              MOVLW    HIGH(gps_State_0003)
+              MOVLW    HIGH(step_gps_State_0003)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0003)
+              MOVLW    LOW(step_gps_State_0003)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans9:       MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans9:       GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0003
+; Node gps_State_0003 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0003:
-              ;  Precondition gpsInput == 65
+step_gps_State_0003:
+              ;  Precondition gpsInput == 'A'
 trans10:      MOVLW    .65
               CPFSEQ   gpsInput, A
               GOTO     trans11
@@ -178,25 +174,21 @@ trans10:      MOVLW    .65
               BTFSC    gpsFlags, 0, A
               GOTO     trans11
               ;  Transition GOTO gps_State_0004
-              MOVLW    HIGH(gps_State_0004)
+              MOVLW    HIGH(step_gps_State_0004)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0004)
+              MOVLW    LOW(step_gps_State_0004)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans11:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans11:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0004
+; Node gps_State_0004 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0004:
-              ;  Precondition gpsInput == 44
+step_gps_State_0004:
+              ;  Precondition gpsInput == ','
 trans12:      MOVLW    .44
               CPFSEQ   gpsInput, A
               GOTO     trans13
@@ -211,33 +203,29 @@ trans12:      MOVLW    .44
               CLRF     (gpsTime + .4)
               CLRF     (gpsTime + .5)
               ;  Transition GOTO gps_State_0005
-              MOVLW    HIGH(gps_State_0005)
+              MOVLW    HIGH(step_gps_State_0005)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0005)
+              MOVLW    LOW(step_gps_State_0005)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans13:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans13:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0005
+; Node gps_State_0005 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0005:
-              ;  Precondition gpsInput >= 48
+step_gps_State_0005:
+              ;  Precondition gpsInput >= '0'
 trans14:      MOVLW    .47
               CPFSGT   gpsInput, A
               GOTO     trans15
-              ;  Precondition gpsInput <= 57
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
               GOTO     trans15
-              ;  Precondition gps_storeCount <= 4
+              ;  Precondition gps_storeCount <= 0x04
               MOVLW    .5
               CPFSLT   gps_storeCount, A
               GOTO     trans15
@@ -247,22 +235,18 @@ trans14:      MOVLW    .47
               MOVFF    gpsInput, PLUSW0
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
-              ;  Transition GOTO gps_State_0005
-              MOVLW    HIGH(gps_State_0005)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0005)
-              MOVWF    _statePtr, A
+              ;  Transition GOTO SELF
               RETURN   
               ; -- Start of transition --
-              ;  Precondition gpsInput >= 48
+              ;  Precondition gpsInput >= '0'
 trans15:      MOVLW    .47
               CPFSGT   gpsInput, A
               GOTO     trans16
-              ;  Precondition gpsInput <= 57
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
               GOTO     trans16
-              ;  Precondition gps_storeCount == 5
+              ;  Precondition gps_storeCount == 0x05
               MOVLW    .5
               CPFSEQ   gps_storeCount, A
               GOTO     trans16
@@ -273,36 +257,28 @@ trans15:      MOVLW    .47
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
               ;  Transition GOTO gps_State_0006
-              MOVLW    HIGH(gps_State_0006)
+              MOVLW    HIGH(step_gps_State_0006)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0006)
+              MOVLW    LOW(step_gps_State_0006)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans16:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans16:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0006
+; Node gps_State_0006 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0006:
-              ;  Precondition gpsInput == 36
+step_gps_State_0006:
+              ;  Precondition gpsInput == '$'
 trans17:      MOVLW    .36
               CPFSEQ   gpsInput, A
               GOTO     trans18
-              ;  Transition GOTO dollar
-              MOVLW    HIGH(dollar)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(dollar)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) dollar
+              GOTO     enter_dollar
               ; -- Start of transition --
-              ;  Precondition gpsInput == 44
+              ;  Precondition gpsInput == ','
 trans18:      MOVLW    .44
               CPFSEQ   gpsInput, A
               GOTO     trans19
@@ -315,68 +291,53 @@ trans18:      MOVLW    .44
               CLRF     (gpsLatitudeDegMin + .2)
               CLRF     (gpsLatitudeDegMin + .3)
               ;  Transition GOTO gps_State_0007
-              MOVLW    HIGH(gps_State_0007)
+              MOVLW    HIGH(step_gps_State_0007)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0007)
+              MOVLW    LOW(step_gps_State_0007)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO gps_State_0006
-trans19:      MOVLW    HIGH(gps_State_0006)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0006)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
-              ;  Transition GOTO root
-trans20:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO SELF
+trans19:      RETURN   
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0007
+; Node gps_State_0007 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0007:
-              ;  Precondition gpsInput >= 48
-trans21:      MOVLW    .47
+step_gps_State_0007:
+              ;  Precondition gpsInput >= '0'
+trans20:      MOVLW    .47
               CPFSGT   gpsInput, A
-              GOTO     trans22
-              ;  Precondition gpsInput <= 57
+              GOTO     trans21
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
-              GOTO     trans22
-              ;  Precondition gps_storeCount <= 2
+              GOTO     trans21
+              ;  Precondition gps_storeCount <= 0x02
               MOVLW    .3
               CPFSLT   gps_storeCount, A
-              GOTO     trans22
+              GOTO     trans21
               ;  Command gpsLatitudeDegMin[gps_storeCount] := gpsInput
               LFSR     FSR0, gpsLatitudeDegMin
               MOVF     gps_storeCount, W, A
               MOVFF    gpsInput, PLUSW0
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
-              ;  Transition GOTO gps_State_0007
-              MOVLW    HIGH(gps_State_0007)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0007)
-              MOVWF    _statePtr, A
+              ;  Transition GOTO SELF
               RETURN   
               ; -- Start of transition --
-              ;  Precondition gpsInput >= 48
-trans22:      MOVLW    .47
+              ;  Precondition gpsInput >= '0'
+trans21:      MOVLW    .47
               CPFSGT   gpsInput, A
-              GOTO     trans23
-              ;  Precondition gpsInput <= 57
+              GOTO     trans22
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
-              GOTO     trans23
-              ;  Precondition gps_storeCount == 3
+              GOTO     trans22
+              ;  Precondition gps_storeCount == 0x03
               MOVLW    .3
               CPFSEQ   gps_storeCount, A
-              GOTO     trans23
+              GOTO     trans22
               ;  Command gpsLatitudeDegMin[gps_storeCount] := gpsInput
               LFSR     FSR0, gpsLatitudeDegMin
               MOVF     gps_storeCount, W, A
@@ -384,28 +345,24 @@ trans22:      MOVLW    .47
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
               ;  Transition GOTO gps_State_0008
-              MOVLW    HIGH(gps_State_0008)
+              MOVLW    HIGH(step_gps_State_0008)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0008)
+              MOVLW    LOW(step_gps_State_0008)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans23:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans22:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0008
+; Node gps_State_0008 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0008:
-              ;  Precondition gpsInput == 46
-trans24:      MOVLW    .46
+step_gps_State_0008:
+              ;  Precondition gpsInput == '.'
+trans23:      MOVLW    .46
               CPFSEQ   gpsInput, A
-              GOTO     trans25
+              GOTO     trans24
               ;  Command gps_storeCount := 0
               CLRF     gps_storeCount, A
               ;  Command gpsLatitudeHundredths := 0
@@ -413,61 +370,53 @@ trans24:      MOVLW    .46
               CLRF     gpsLatitudeHundredths
               CLRF     (gpsLatitudeHundredths + .1)
               ;  Transition GOTO gps_State_0009
-              MOVLW    HIGH(gps_State_0009)
+              MOVLW    HIGH(step_gps_State_0009)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0009)
+              MOVLW    LOW(step_gps_State_0009)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans25:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans24:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0009
+; Node gps_State_0009 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0009:
-              ;  Precondition gpsInput >= 48
+step_gps_State_0009:
+              ;  Precondition gpsInput >= '0'
+trans25:      MOVLW    .47
+              CPFSGT   gpsInput, A
+              GOTO     trans26
+              ;  Precondition gpsInput <= '9'
+              MOVLW    .58
+              CPFSLT   gpsInput, A
+              GOTO     trans26
+              ;  Precondition gps_storeCount <= 0x00
+              MOVLW    .1
+              CPFSLT   gps_storeCount, A
+              GOTO     trans26
+              ;  Command gpsLatitudeHundredths[gps_storeCount] := gpsInput
+              LFSR     FSR0, gpsLatitudeHundredths
+              MOVF     gps_storeCount, W, A
+              MOVFF    gpsInput, PLUSW0
+              ;  Command gps_storeCount++
+              INCF     gps_storeCount, F, A
+              ;  Transition GOTO SELF
+              RETURN   
+              ; -- Start of transition --
+              ;  Precondition gpsInput >= '0'
 trans26:      MOVLW    .47
               CPFSGT   gpsInput, A
               GOTO     trans27
-              ;  Precondition gpsInput <= 57
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
               GOTO     trans27
-              ;  Precondition gps_storeCount <= 0
-              MOVLW    .1
-              CPFSLT   gps_storeCount, A
-              GOTO     trans27
-              ;  Command gpsLatitudeHundredths[gps_storeCount] := gpsInput
-              LFSR     FSR0, gpsLatitudeHundredths
-              MOVF     gps_storeCount, W, A
-              MOVFF    gpsInput, PLUSW0
-              ;  Command gps_storeCount++
-              INCF     gps_storeCount, F, A
-              ;  Transition GOTO gps_State_0009
-              MOVLW    HIGH(gps_State_0009)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0009)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
-              ;  Precondition gpsInput >= 48
-trans27:      MOVLW    .47
-              CPFSGT   gpsInput, A
-              GOTO     trans28
-              ;  Precondition gpsInput <= 57
-              MOVLW    .58
-              CPFSLT   gpsInput, A
-              GOTO     trans28
-              ;  Precondition gps_storeCount == 1
+              ;  Precondition gps_storeCount == 0x01
               MOVLW    .1
               CPFSEQ   gps_storeCount, A
-              GOTO     trans28
+              GOTO     trans27
               ;  Command gpsLatitudeHundredths[gps_storeCount] := gpsInput
               LFSR     FSR0, gpsLatitudeHundredths
               MOVF     gps_storeCount, W, A
@@ -475,107 +424,86 @@ trans27:      MOVLW    .47
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
               ;  Transition GOTO gps_State_0010
-              MOVLW    HIGH(gps_State_0010)
+              MOVLW    HIGH(step_gps_State_0010)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0010)
+              MOVLW    LOW(step_gps_State_0010)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans28:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans27:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0010
+; Node gps_State_0010 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0010:
-              ;  Precondition gpsInput == 36
-trans29:      MOVLW    .36
+step_gps_State_0010:
+              ;  Precondition gpsInput == '$'
+trans28:      MOVLW    .36
+              CPFSEQ   gpsInput, A
+              GOTO     trans29
+              ;  Transition GOTO (Shared) dollar
+              GOTO     enter_dollar
+              ; -- Start of transition --
+              ;  Precondition gpsInput == ','
+trans29:      MOVLW    .44
               CPFSEQ   gpsInput, A
               GOTO     trans30
-              ;  Transition GOTO dollar
-              MOVLW    HIGH(dollar)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(dollar)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
-              ;  Precondition gpsInput == 44
-trans30:      MOVLW    .44
-              CPFSEQ   gpsInput, A
-              GOTO     trans31
               ;  Transition GOTO gps_State_0011
-              MOVLW    HIGH(gps_State_0011)
+              MOVLW    HIGH(step_gps_State_0011)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0011)
+              MOVLW    LOW(step_gps_State_0011)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO gps_State_0010
-trans31:      MOVLW    HIGH(gps_State_0010)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0010)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
-              ;  Transition GOTO root
-trans32:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO SELF
+trans30:      RETURN   
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0011
+; Node gps_State_0011 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0011:
-              ;  Precondition gpsInput == 83
-trans33:      MOVLW    .83
+step_gps_State_0011:
+              ;  Precondition gpsInput == 'S'
+trans31:      MOVLW    .83
               CPFSEQ   gpsInput, A
-              GOTO     trans34
+              GOTO     trans32
               ;  Command gpsFlags:1 := false
               BCF      gpsFlags, 1, A
-              ;  Transition GOTO gps_State_0012
-              MOVLW    HIGH(gps_State_0012)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0012)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) gps_State_0012
+              GOTO     enter_gps_State_0012
               ; -- Start of transition --
-              ;  Precondition gpsInput == 78
-trans34:      MOVLW    .78
+              ;  Precondition gpsInput == 'N'
+trans32:      MOVLW    .78
               CPFSEQ   gpsInput, A
-              GOTO     trans35
+              GOTO     trans33
               ;  Command gpsFlags:1 := true
               BSF      gpsFlags, 1, A
-              ;  Transition GOTO gps_State_0012
-              MOVLW    HIGH(gps_State_0012)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0012)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) gps_State_0012
+              GOTO     enter_gps_State_0012
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans35:      MOVLW    HIGH(root)
+              ;  Transition GOTO (Shared) root
+trans33:      GOTO     enter_root
+
+;------------------------------------------------------------------------------
+; Node gps_State_0012 entry code.
+;------------------------------------------------------------------------------
+              ;  Transition GOTO gps_State_0012
+enter_gps_State_0012: MOVLW    HIGH(step_gps_State_0012)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
+              MOVLW    LOW(step_gps_State_0012)
               MOVWF    _statePtr, A
               RETURN   
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0012
+; Node gps_State_0012 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0012:
-              ;  Precondition gpsInput == 44
-trans36:      MOVLW    .44
+step_gps_State_0012:
+              ;  Precondition gpsInput == ','
+trans34:      MOVLW    .44
               CPFSEQ   gpsInput, A
-              GOTO     trans37
+              GOTO     trans35
               ;  Command gps_storeCount := 0
               CLRF     gps_storeCount, A
               ;  Command gpsLongitudeDegMin := 0
@@ -586,61 +514,53 @@ trans36:      MOVLW    .44
               CLRF     (gpsLongitudeDegMin + .3)
               CLRF     (gpsLongitudeDegMin + .4)
               ;  Transition GOTO gps_State_0013
-              MOVLW    HIGH(gps_State_0013)
+              MOVLW    HIGH(step_gps_State_0013)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0013)
+              MOVLW    LOW(step_gps_State_0013)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans37:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans35:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0013
+; Node gps_State_0013 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0013:
-              ;  Precondition gpsInput >= 48
-trans38:      MOVLW    .47
+step_gps_State_0013:
+              ;  Precondition gpsInput >= '0'
+trans36:      MOVLW    .47
               CPFSGT   gpsInput, A
-              GOTO     trans39
-              ;  Precondition gpsInput <= 57
+              GOTO     trans37
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
-              GOTO     trans39
-              ;  Precondition gps_storeCount <= 3
+              GOTO     trans37
+              ;  Precondition gps_storeCount <= 0x03
               MOVLW    .4
               CPFSLT   gps_storeCount, A
-              GOTO     trans39
+              GOTO     trans37
               ;  Command gpsLongitudeDegMin[gps_storeCount] := gpsInput
               LFSR     FSR0, gpsLongitudeDegMin
               MOVF     gps_storeCount, W, A
               MOVFF    gpsInput, PLUSW0
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
-              ;  Transition GOTO gps_State_0013
-              MOVLW    HIGH(gps_State_0013)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0013)
-              MOVWF    _statePtr, A
+              ;  Transition GOTO SELF
               RETURN   
               ; -- Start of transition --
-              ;  Precondition gpsInput >= 48
-trans39:      MOVLW    .47
+              ;  Precondition gpsInput >= '0'
+trans37:      MOVLW    .47
               CPFSGT   gpsInput, A
-              GOTO     trans40
-              ;  Precondition gpsInput <= 57
+              GOTO     trans38
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
-              GOTO     trans40
-              ;  Precondition gps_storeCount == 4
+              GOTO     trans38
+              ;  Precondition gps_storeCount == 0x04
               MOVLW    .4
               CPFSEQ   gps_storeCount, A
-              GOTO     trans40
+              GOTO     trans38
               ;  Command gpsLongitudeDegMin[gps_storeCount] := gpsInput
               LFSR     FSR0, gpsLongitudeDegMin
               MOVF     gps_storeCount, W, A
@@ -648,28 +568,24 @@ trans39:      MOVLW    .47
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
               ;  Transition GOTO gps_State_0014
-              MOVLW    HIGH(gps_State_0014)
+              MOVLW    HIGH(step_gps_State_0014)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0014)
+              MOVLW    LOW(step_gps_State_0014)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans40:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans38:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0014
+; Node gps_State_0014 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0014:
-              ;  Precondition gpsInput == 46
-trans41:      MOVLW    .46
+step_gps_State_0014:
+              ;  Precondition gpsInput == '.'
+trans39:      MOVLW    .46
               CPFSEQ   gpsInput, A
-              GOTO     trans42
+              GOTO     trans40
               ;  Command gps_storeCount := 0
               CLRF     gps_storeCount, A
               ;  Command gpsLongitudeHundredths := 0
@@ -677,61 +593,53 @@ trans41:      MOVLW    .46
               CLRF     gpsLongitudeHundredths
               CLRF     (gpsLongitudeHundredths + .1)
               ;  Transition GOTO gps_State_0015
-              MOVLW    HIGH(gps_State_0015)
+              MOVLW    HIGH(step_gps_State_0015)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0015)
+              MOVLW    LOW(step_gps_State_0015)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans42:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans40:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0015
+; Node gps_State_0015 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0015:
-              ;  Precondition gpsInput >= 48
-trans43:      MOVLW    .47
+step_gps_State_0015:
+              ;  Precondition gpsInput >= '0'
+trans41:      MOVLW    .47
               CPFSGT   gpsInput, A
-              GOTO     trans44
-              ;  Precondition gpsInput <= 57
+              GOTO     trans42
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
-              GOTO     trans44
-              ;  Precondition gps_storeCount <= 0
+              GOTO     trans42
+              ;  Precondition gps_storeCount <= 0x00
               MOVLW    .1
               CPFSLT   gps_storeCount, A
-              GOTO     trans44
+              GOTO     trans42
               ;  Command gpsLongitudeHundredths[gps_storeCount] := gpsInput
               LFSR     FSR0, gpsLongitudeHundredths
               MOVF     gps_storeCount, W, A
               MOVFF    gpsInput, PLUSW0
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
-              ;  Transition GOTO gps_State_0015
-              MOVLW    HIGH(gps_State_0015)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0015)
-              MOVWF    _statePtr, A
+              ;  Transition GOTO SELF
               RETURN   
               ; -- Start of transition --
-              ;  Precondition gpsInput >= 48
-trans44:      MOVLW    .47
+              ;  Precondition gpsInput >= '0'
+trans42:      MOVLW    .47
               CPFSGT   gpsInput, A
-              GOTO     trans45
-              ;  Precondition gpsInput <= 57
+              GOTO     trans43
+              ;  Precondition gpsInput <= '9'
               MOVLW    .58
               CPFSLT   gpsInput, A
-              GOTO     trans45
-              ;  Precondition gps_storeCount == 1
+              GOTO     trans43
+              ;  Precondition gps_storeCount == 0x01
               MOVLW    .1
               CPFSEQ   gps_storeCount, A
-              GOTO     trans45
+              GOTO     trans43
               ;  Command gpsLongitudeHundredths[gps_storeCount] := gpsInput
               LFSR     FSR0, gpsLongitudeHundredths
               MOVF     gps_storeCount, W, A
@@ -739,154 +647,106 @@ trans44:      MOVLW    .47
               ;  Command gps_storeCount++
               INCF     gps_storeCount, F, A
               ;  Transition GOTO gps_State_0016
-              MOVLW    HIGH(gps_State_0016)
+              MOVLW    HIGH(step_gps_State_0016)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0016)
+              MOVLW    LOW(step_gps_State_0016)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans45:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans43:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0016
+; Node gps_State_0016 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0016:
-              ;  Precondition gpsInput == 36
-trans46:      MOVLW    .36
+step_gps_State_0016:
+              ;  Precondition gpsInput == '$'
+trans44:      MOVLW    .36
               CPFSEQ   gpsInput, A
-              GOTO     trans47
-              ;  Transition GOTO dollar
-              MOVLW    HIGH(dollar)
+              GOTO     trans45
+              ;  Transition GOTO (Shared) dollar
+              GOTO     enter_dollar
+              ; -- Start of transition --
+              ;  Precondition gpsInput == ','
+trans45:      MOVLW    .44
+              CPFSEQ   gpsInput, A
+              GOTO     trans46
+              ;  Transition GOTO gps_State_0017
+              MOVLW    HIGH(step_gps_State_0017)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(dollar)
+              MOVLW    LOW(step_gps_State_0017)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Precondition gpsInput == 44
-trans47:      MOVLW    .44
+              ;  Transition GOTO SELF
+trans46:      RETURN   
+
+;------------------------------------------------------------------------------
+; Node gps_State_0017 step code.
+;------------------------------------------------------------------------------
+              ; -- Start of transition --
+step_gps_State_0017:
+              ;  Precondition gpsInput == 'E'
+trans47:      MOVLW    .69
               CPFSEQ   gpsInput, A
               GOTO     trans48
-              ;  Transition GOTO gps_State_0017
-              MOVLW    HIGH(gps_State_0017)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0017)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
-              ;  Transition GOTO gps_State_0016
-trans48:      MOVLW    HIGH(gps_State_0016)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0016)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
-              ;  Transition GOTO root
-trans49:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
-
-;------------------------------------------------------------------------------
-; Node gps_State_0017
-;------------------------------------------------------------------------------
-              ; -- Start of transition --
-gps_State_0017:
-              ;  Precondition gpsInput == 69
-trans50:      MOVLW    .69
-              CPFSEQ   gpsInput, A
-              GOTO     trans51
               ;  Command gpsFlags:2 := true
               BSF      gpsFlags, 2, A
-              ;  Transition GOTO gps_State_0018
-              MOVLW    HIGH(gps_State_0018)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0018)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) gps_State_0018
+              GOTO     enter_gps_State_0018
               ; -- Start of transition --
-              ;  Precondition gpsInput == 87
-trans51:      MOVLW    .87
+              ;  Precondition gpsInput == 'W'
+trans48:      MOVLW    .87
               CPFSEQ   gpsInput, A
-              GOTO     trans52
+              GOTO     trans49
               ;  Command gpsFlags:2 := false
               BCF      gpsFlags, 2, A
+              ;  Transition GOTO (Shared) gps_State_0018
+              GOTO     enter_gps_State_0018
+              ; -- Start of transition --
+              ;  Transition GOTO (Shared) root
+trans49:      GOTO     enter_root
+
+;------------------------------------------------------------------------------
+; Node gps_State_0018 entry code.
+;------------------------------------------------------------------------------
               ;  Transition GOTO gps_State_0018
-              MOVLW    HIGH(gps_State_0018)
+enter_gps_State_0018: MOVLW    HIGH(step_gps_State_0018)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0018)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
-              ;  Transition GOTO root
-trans52:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
+              MOVLW    LOW(step_gps_State_0018)
               MOVWF    _statePtr, A
               RETURN   
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0018
+; Node gps_State_0018 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0018:
-              ;  Precondition gpsInput == 44
-trans53:      MOVLW    .44
+step_gps_State_0018:
+              ;  Precondition gpsInput == ','
+trans50:      MOVLW    .44
               CPFSEQ   gpsInput, A
-              GOTO     trans54
+              GOTO     trans51
               ;  Transition GOTO gps_State_0019
-              MOVLW    HIGH(gps_State_0019)
+              MOVLW    HIGH(step_gps_State_0019)
               MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(gps_State_0019)
+              MOVLW    LOW(step_gps_State_0019)
               MOVWF    _statePtr, A
               RETURN   
               ; -- Start of transition --
-              ;  Transition GOTO root
-trans54:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+trans51:      GOTO     enter_root
 
 ;------------------------------------------------------------------------------
-; Node gps_State_0019
+; Node gps_State_0019 step code.
 ;------------------------------------------------------------------------------
               ; -- Start of transition --
-gps_State_0019:
+step_gps_State_0019:
               ;  Command gpsQuality := gpsInput
-trans55:      MOVFF    gpsInput, gpsQuality
+trans52:      MOVFF    gpsInput, gpsQuality
               ;  Command gpsFlags:0 := true
               BSF      gpsFlags, 0, A
-              ;  Transition GOTO root
-              MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
-              ; -- Start of transition --
-              ;  Transition GOTO root
-trans56:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
-
-;------------------------------------------------------------------------------
-; Node gps_State_0020
-;------------------------------------------------------------------------------
-              ; -- Start of transition --
-gps_State_0020:
-              ;  Transition GOTO root
-trans57:      MOVLW    HIGH(root)
-              MOVWF    (_statePtr + .1), A
-              MOVLW    LOW(root)
-              MOVWF    _statePtr, A
-              RETURN   
+              ;  Transition GOTO (Shared) root
+              GOTO     enter_root
 
               END

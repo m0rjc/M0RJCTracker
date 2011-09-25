@@ -79,12 +79,10 @@
 						<Choice input="*">
 							<Commands>
 								<StoreValue destination="gpsQuality"/>
+								<SetFlag variable="gpsFlags" flag="FLAG_GPS_NEW_POSITION" value="true" />
 							</Commands>
 						</Choice>
 					</Choices>
-					<Commands>
-						<SetFlag variable="gpsFlags" flag="FLAG_GPS_NEW_POSITION" value="true" />
-					</Commands>
 				</Script>
 			</Node>
 		</Nodes>

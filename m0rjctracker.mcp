@@ -36,6 +36,7 @@ file_008=.
 file_009=.
 file_010=.
 file_011=.
+file_012=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -49,6 +50,7 @@ file_008=no
 file_009=no
 file_010=no
 file_011=no
+file_012=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -61,20 +63,22 @@ file_007=no
 file_008=no
 file_009=no
 file_010=no
-file_011=yes
+file_011=no
+file_012=yes
 [FILE_INFO]
 file_000=src\config.asm
 file_001=src\main.c
 file_002=src\modem.asm
 file_003=src\aprs.c
-file_004=src\config.inc
-file_005=src\gpsstate.inc
-file_006=src\modem.h
-file_007=src\modem.inc
-file_008=src\aprs.h
-file_009=src\buildconfig.inc.h
-file_010=m0rjctracker.lkr
-file_011=Wave table calculation.ods
+file_004=src\gps.asm
+file_005=src\config.inc
+file_006=src\gpsstate.inc
+file_007=src\modem.h
+file_008=src\modem.inc
+file_009=src\aprs.h
+file_010=src\buildconfig.inc.h
+file_011=m0rjctracker.lkr
+file_012=Wave table calculation.ods
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=
