@@ -10,6 +10,7 @@
 #include "buildconfig.inc.h"
 #include "modem.h"
 #include "aprs.h"
+#include "gps.h"
 
 #pragma config WDTEN=OFF  	// disable watchdog timer
 #pragma config MCLRE = OFF  // MCLEAR Pin on
